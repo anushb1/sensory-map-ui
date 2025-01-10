@@ -3,6 +3,9 @@ import { SearchBar } from "@/components/SearchBar";
 import { FilterTags } from "@/components/FilterTags";
 import { PatientCard } from "@/components/PatientCard";
 import { Navigation } from "@/components/Navigation";
+import { PatientForm } from "@/components/PatientForm";
+import { DailyRecordForm } from "@/components/DailyRecordForm";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const mockPatients = [
   {
@@ -25,7 +28,6 @@ const mockPatients = [
     activity: "Motor skills",
     reduction: 23,
   },
-  // Add more mock patients here
 ];
 
 const filterTags = ["Autism", "Cerebral Palsy", "ADHD", "Dyslexia", "OCD"];
@@ -35,22 +37,38 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
-      <div className="max-w-md mx-auto p-4">
-        <h1 className="text-2xl font-bold mb-6">Patients</h1>
+      <div className="max-w-4xl mx-auto p-4">
+        <h1 className="text-2xl font-bold mb-6">Patient Management</h1>
         
-        <SearchBar />
-        
-        <FilterTags
-          tags={filterTags}
-          selectedTag={selectedTag}
-          onSelectTag={setSelectedTag}
-        />
+        <Tabs defaultValue="list" className="w-full">
+          <TabsList className="grid w-full grid-cols-3 mb-6">
+            <TabsTrigger value="list">Patient List</TabsTrigger>
+            <TabsTrigger value="add">Add Patient</TabsTrigger>
+            <TabsTrigger value="daily">Daily Record</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="list">
+            <SearchBar />
+            <FilterTags
+              tags={filterTags}
+              selectedTag={selectedTag}
+              onSelectTag={setSelectedTag}
+            />
+            <div className="space-y-4">
+              {mockPatients.map((patient) => (
+                <PatientCard key={patient.name} {...patient} />
+              ))}
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="add">
+            <PatientForm />
+          </TabsContent>
 
-        <div className="space-y-4">
-          {mockPatients.map((patient) => (
-            <PatientCard key={patient.name} {...patient} />
-          ))}
-        </div>
+          <TabsContent value="daily">
+            <DailyRecordForm />
+          </TabsContent>
+        </Tabs>
       </div>
 
       <Navigation />
